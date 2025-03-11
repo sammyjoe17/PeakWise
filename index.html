@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NE Grid Energy Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>New England Energy Dashboard</h1>
+            <p>Real-time electricity cost and environmental impact</p>
+        </header>
+
+        <div class="api-status-container">
+            <div id="api-status" class="api-status pending">
+                <span class="status-icon">●</span>
+                <span class="status-text">API Status: Pending Connection</span>
+            </div>
+            <button id="force-refresh" class="refresh-button">Refresh Data</button>
+            <button id="test-connection" class="test-button">Test API Connection</button>
+            <button id="test-direct" class="test-button direct">Test Without Proxy</button>
+            <button id="use-sample" class="sample-button">Use Sample Data</button>
+            <button id="check-backend" class="check-button">Check Backend</button>
+        </div>
+
+        <main>
+            <section id="api-login" class="api-login">
+                <h2>Backend Configuration</h2>
+                <p>Your ISO-NE API credentials should be set in the Python backend.</p>
+                <p>If you haven't set up your credentials yet:</p>
+                <ol>
+                    <li>Stop the Python backend</li>
+                    <li>Set environment variables ISO_USERNAME and ISO_PASSWORD</li>
+                    <li>Restart the backend</li>
+                </ol>
+                <button id="hide-login" class="submit-btn">I've Set Up My Backend</button>
+            </section>
+
+            <section class="current-status">
+                <h2>Current Grid Status</h2>
+                <div class="status-cards">
+                    <div class="card" id="price-card">
+                        <h3>Current Price</h3>
+                        <div class="value" id="current-price">Loading...</div>
+                        <div class="unit">$/MWh</div>
+                    </div>
+                    
+                    <div class="card" id="ghg-card">
+                        <h3>Carbon Intensity</h3>
+                        <div class="value" id="carbon-intensity">Loading...</div>
+                        <div class="unit">kg CO₂eq/MWh</div>
+                    </div>
+                    
+                    <div class="card" id="fuel-mix-card">
+                        <h3>Current Energy Mix</h3>
+                        <div class="chart-container">
+                            <div class="chart-wrapper">
+                                <h4>Generation Mix</h4>
+                                <canvas id="generation-mix-chart" width="200" height="200"></canvas>
+                            </div>
+                            <div class="chart-wrapper">
+                                <h4>Resource Mix</h4>
+                                <canvas id="resource-mix-chart" width="200" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="future-features">
+                <h2>Coming Soon</h2>
+                <div class="feature-cards">
+                    <div class="feature-card">
+                        <h3>Your Home's Impact</h3>
+                        <p>Connect your smart meter to see your real-time carbon footprint and costs</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>Smart Device Management</h3>
+                        <p>Automatically manage your IoT devices to reduce costs and environmental impact</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="iso-dashboard">
+                <h2>New England Grid Data</h2>
+                <div class="dashboard-grid">
+                    <!-- First row -->
+                    <div class="dashboard-item">
+                        <h3>System Load</h3>
+                        <div id="system-load-chart-detail" class="chart-container"></div>
+                    </div>
+                    <div class="dashboard-item">
+                        <h3>Real-Time LMP</h3>
+                        <div id="rt-lmp-chart-detail" class="chart-container"></div>
+                    </div>
+                    
+                    <!-- Second row -->
+                    <div class="dashboard-item">
+                        <h3>Resource Mix</h3>
+                        <div id="resource-mix-chart-detail" class="chart-container"></div>
+                    </div>
+                    <div class="dashboard-item">
+                        <h3>CO₂ Emissions</h3>
+                        <div id="emissions-chart-detail" class="chart-container"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>Data provided by New England ISO | Updated <span id="last-updated">...</span></p>
+            <p><span class="debug-toggle" id="debug-toggle">Show Debug Information</span></p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
