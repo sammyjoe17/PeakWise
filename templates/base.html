@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <title>{% block title %}PeakWise{% endblock %}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><img src="{{ url_for('static', filename='assets/Logo_Black.png') }}" alt="PeakWise" class="logo"></h1>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}" {% if request.endpoint == 'home' %}class="active"{% endif %}>
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="{{ url_for('education') }}" {% if request.endpoint == 'education' %}class="active"{% endif %}>
+                    <i class="fas fa-book"></i> Education
+                </a>
+                <a href="{{ url_for('insights') }}" {% if request.endpoint == 'insights' %}class="active"{% endif %}>
+                    <i class="fas fa-lightbulb"></i> Insights
+                </a>
+                <a href="{{ url_for('rewards') }}" {% if request.endpoint == 'rewards' %}class="active"{% endif %}>
+                    <i class="fas fa-gift"></i> Rewards
+                </a>
+                <div class="user-menu">
+                    <span class="username">{{ session.username }}</span>
+                    <a href="{{ url_for('logout') }}" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+            {% if show_api_status %}
+            <div id="api-status" class="api-status pending">Checking API Status...</div>
+            {% endif %}
+        </header>
+
+        {% block content %}{% endblock %}
+    </div>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

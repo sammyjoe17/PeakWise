@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+
+{% block title %}Personalized Energy Insights - PeakWise{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .insights-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .insights-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .insights-header h1 {
+        font-size: 2.5rem;
+        color: var(--primary-black);
+        margin-bottom: 1rem;
+    }
+
+    .insights-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+        width: 100%;
+    }
+
+    .insight-card {
+        background: var(--color-background);
+        border: 2px solid var(--primary-black);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .insight-card h3 {
+        color: var(--primary-black);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .insight-card h3 i {
+        color: var(--primary-yellow);
+    }
+
+    .insight-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary-black);
+        margin: 1rem 0;
+    }
+
+    .insight-trend {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .trend-up {
+        color: #e74c3c;
+    }
+
+    .trend-down {
+        color: #2ecc71;
+    }
+
+    .chart-container {
+        background: var(--color-background);
+        border: 2px solid var(--primary-black);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        height: 400px;
+        position: relative;
+    }
+
+    .chart-container h2 {
+        color: var(--primary-black);
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .chart-container canvas {
+        width: 100% !important;
+        height: calc(100% - 60px) !important;
+        margin: 0 auto;
+    }
+
+    .recommendations {
+        background: var(--color-background);
+        border: 2px solid var(--primary-black);
+        border-radius: 12px;
+        padding: 1.5rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .recommendations h2 {
+        color: var(--primary-black);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .recommendations h2 i {
+        color: var(--primary-yellow);
+    }
+
+    .recommendation-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .recommendation-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid var(--color-border);
+    }
+
+    .recommendation-item i {
+        color: var(--primary-yellow);
+        font-size: 1.2rem;
+        margin-top: 0.25rem;
+    }
+
+    .recommendation-content {
+        flex: 1;
+    }
+
+    .recommendation-content h4 {
+        color: var(--primary-black);
+        margin-bottom: 0.5rem;
+    }
+
+    .recommendation-content p {
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+    }
+
+    .potential-savings {
+        color: var(--primary-yellow);
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+        .insights-container {
+            padding: 1rem;
+        }
+
+        .chart-container {
+            height: 300px;
+            padding: 1rem;
+        }
+
+        .insights-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .insight-value {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="insights-container">
+    <div class="insights-header">
+        <h1>Your Energy Insights</h1>
+        <p>Personalized analysis of your energy usage and its impact on the grid</p>
+    </div>
+
+    <div class="insights-grid">
+        <div class="insight-card">
+            <h3><i class="fas fa-bolt"></i> Peak Impact</h3>
+            <div class="insight-value">{{ peak_impact }}%</div>
+            <p>of your usage contributes to peak load</p>
+            <div class="insight-trend">
+                {% if peak_trend > 0 %}
+                    <i class="fas fa-arrow-up trend-up"></i>
+                    <span class="trend-up">+{{ peak_trend }}% from last week</span>
+                {% else %}
+                    <i class="fas fa-arrow-down trend-down"></i>
+                    <span class="trend-down">{{ peak_trend }}% from last week</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="insight-card">
+            <h3><i class="fas fa-leaf"></i> Carbon Impact</h3>
+            <div class="insight-value">{{ carbon_impact }} kg</div>
+            <p>CO2 emissions from your usage</p>
+            <div class="insight-trend">
+                {% if carbon_trend > 0 %}
+                    <i class="fas fa-arrow-up trend-up"></i>
+                    <span class="trend-up">+{{ carbon_trend }}% from last week</span>
+                {% else %}
+                    <i class="fas fa-arrow-down trend-down"></i>
+                    <span class="trend-down">{{ carbon_trend }}% from last week</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="insight-card">
+            <h3><i class="fas fa-dollar-sign"></i> Cost Impact</h3>
+            <div class="insight-value">${{ cost_impact }}</div>
+            <p>additional cost from peak usage</p>
+            <div class="insight-trend">
+                {% if cost_trend > 0 %}
+                    <i class="fas fa-arrow-up trend-up"></i>
+                    <span class="trend-up">+${{ cost_trend }} from last week</span>
+                {% else %}
+                    <i class="fas fa-arrow-down trend-down"></i>
+                    <span class="trend-down">-${{ cost_trend|abs }} from last week</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Usage vs. Carbon Intensity</h2>
+        <canvas id="usageChart"></canvas>
+    </div>
+
+    <div class="recommendations">
+        <h2><i class="fas fa-lightbulb"></i> Personalized Recommendations</h2>
+        <ul class="recommendation-list">
+            {% for recommendation in recommendations %}
+            <li class="recommendation-item">
+                <i class="fas fa-check-circle"></i>
+                <div class="recommendation-content">
+                    <h4>{{ recommendation.title }}</h4>
+                    <p>{{ recommendation.description }}</p>
+                    <p class="potential-savings">Potential savings: {{ recommendation.savings }}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Chart initialization code here
+    const ctx = document.getElementById('usageChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ usage_labels|tojson }},
+            datasets: [
+                {
+                    label: 'Your Usage',
+                    data: {{ usage_values|tojson }},
+                    borderColor: 'rgb(33, 37, 41)',
+                    backgroundColor: 'rgba(33, 37, 41, 0.1)',
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                },
+                {
+                    label: 'Carbon Intensity',
+                    data: {{ carbon_intensity|tojson }},
+                    borderColor: 'rgb(255, 193, 7)',
+                    backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value.toFixed(1);
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y.toFixed(1);
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %} 

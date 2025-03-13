@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% block title %}PeakWise Rewards - Earn Points for Smart Energy Choices{% endblock %}
+
+{% block extra_head %}
+<style>
+    .rewards-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .rewards-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .rewards-header h1 {
+        font-size: 2.5rem;
+        color: var(--primary-black);
+        margin-bottom: 1rem;
+    }
+
+    .points-summary {
+        background: var(--color-background);
+        border: 2px solid var(--primary-black);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .points-balance {
+        font-size: 3rem;
+        font-weight: bold;
+        color: var(--primary-yellow);
+        margin: 1rem 0;
+    }
+
+    .points-history {
+        background: var(--color-background);
+        border: 2px solid var(--primary-black);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .points-history h2 {
+        color: var(--primary-black);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .points-history h2 i {
+        color: var(--primary-yellow);
+    }
+
+    .history-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .history-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .history-item:last-child {
+        border-bottom: none;
+    }
+
+    .history-item i {
+        color: var(--primary-yellow);
+        font-size: 1.2rem;
+    }
+
+    .history-details {
+        flex: 1;
+        margin: 0 1rem;
+    }
+
+    .history-details h4 {
+        color: var(--primary-black);
+        margin-bottom: 0.25rem;
+    }
+
+    .history-details p {
+        color: var(--color-text);
+        font-size: 0.9rem;
+    }
+
+    .points-earned {
+        font-weight: bold;
+        color: var(--primary-yellow);
+    }
+
+    .rewards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .reward-card {
+        background: var(--color-background);
+        border: 2px solid var(--primary-black);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: transform 0.2s ease;
+    }
+
+    .reward-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .reward-card img {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        margin-bottom: 1rem;
+    }
+
+    .reward-card h3 {
+        color: var(--primary-black);
+        margin-bottom: 0.5rem;
+    }
+
+    .reward-card p {
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .reward-card .points-cost {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--primary-yellow);
+        margin-bottom: 1rem;
+    }
+
+    .redeem-button {
+        background: var(--primary-yellow);
+        color: var(--primary-black);
+        border: 2px solid var(--primary-black);
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .redeem-button:hover {
+        background: var(--primary-black);
+        color: var(--primary-yellow);
+    }
+
+    .redeem-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+        .rewards-container {
+            padding: 1rem;
+        }
+
+        .points-balance {
+            font-size: 2rem;
+        }
+
+        .history-item {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="rewards-container">
+    <div class="rewards-header">
+        <h1>PeakWise Rewards</h1>
+        <p>Earn points for making smart energy choices and redeem them for rewards</p>
+    </div>
+
+    <div class="points-summary">
+        <h2>Your Points Balance</h2>
+        <div class="points-balance">{{ points_balance }} points</div>
+        <p>Keep making smart energy choices to earn more points!</p>
+    </div>
+
+    <div class="points-history">
+        <h2><i class="fas fa-history"></i> Points History</h2>
+        <ul class="history-list">
+            {% for history in points_history %}
+            <li class="history-item">
+                <i class="fas {{ history.icon }}"></i>
+                <div class="history-details">
+                    <h4>{{ history.title }}</h4>
+                    <p>{{ history.description }}</p>
+                </div>
+                <div class="points-earned">+{{ history.points }} points</div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="rewards-grid">
+        {% for reward in available_rewards %}
+        <div class="reward-card">
+            <img src="{{ url_for('static', filename=reward.image) }}" alt="{{ reward.name }}">
+            <h3>{{ reward.name }}</h3>
+            <p>{{ reward.description }}</p>
+            <div class="points-cost">{{ reward.points_cost }} points</div>
+            <button class="redeem-button" 
+                    onclick="redeemReward('{{ reward.id }}')"
+                    {% if points_balance < reward.points_cost %}disabled{% endif %}>
+                Redeem
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function redeemReward(rewardId) {
+    fetch('/api/redeem-reward', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ reward_id: rewardId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Reward redeemed successfully!');
+            location.reload();
+        } else {
+            alert('Failed to redeem reward: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while redeeming the reward.');
+    });
+}
+</script>
+{% endblock %} 

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - PeakWise Education</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .article-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .article-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-black);
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            color: var(--color-text-light);
+            font-size: 1rem;
+        }
+
+        .article-content {
+            line-height: 1.8;
+            color: var(--text-dark);
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            color: var(--primary-black);
+            margin: 2rem 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .article-content h2 i {
+            color: var(--primary-yellow);
+            font-size: 1.5rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+        }
+
+        .article-image-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .article-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 2px solid var(--primary-black);
+            margin-bottom: 1rem;
+        }
+
+        .image-caption {
+            color: var(--color-text-light);
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .article-content .infobox {
+            background: var(--color-background);
+            border: 2px solid var(--primary-black);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+        }
+
+        .article-content .infobox h3 {
+            color: var(--primary-black);
+            margin-top: 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .article-content .infobox h3 i {
+            color: var(--primary-yellow);
+        }
+
+        .article-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .article-content ul li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .article-content ul li i {
+            color: var(--primary-yellow);
+            margin-top: 0.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--primary-black);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            border: 2px solid var(--primary-black);
+            background: var(--primary-yellow);
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--primary-black);
+            color: var(--primary-yellow);
+        }
+
+        .nav-links a.active {
+            background: var(--primary-black);
+            color: var(--primary-yellow);
+        }
+
+        .back-to-education {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-yellow);
+            color: var(--primary-black);
+            text-decoration: none;
+            border-radius: 6px;
+            border: 2px solid var(--primary-black);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .back-to-education:hover {
+            background: var(--primary-black);
+            color: var(--primary-yellow);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links a {
+                text-align: center;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .article-content h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="{{ url_for('education') }}" class="active"><i class="fas fa-book"></i> Education</a>
+        </div>
+
+        <article class="article-content">
+            <div class="article-header">
+                <h1>{{ title }}</h1>
+                <div class="article-meta">
+                    <span><i class="far fa-clock"></i> {{ read_time }} min read</span>
+                    <span><i class="far fa-bookmark"></i> {{ difficulty }}</span>
+                </div>
+            </div>
+
+            {{ content | safe }}
+
+            <a href="{{ url_for('education') }}" class="back-to-education">
+                <i class="fas fa-arrow-left"></i> Back to Education
+            </a>
+        </article>
+    </div>
+</body>
+</html> 

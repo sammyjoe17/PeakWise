@@ -1,68 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:,">
-    <title>PeakWise - Energy Dashboard</title>
-    <link rel="stylesheet" href="/static/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.1/dist/chartjs-adapter-moment.min.js"></script>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>PeakWise</h1>
-            <div id="api-status" class="api-status pending">Checking API Status...</div>
-        </header>
+{% extends "base.html" %}
 
-        <div class="controls">
-            <button id="forceRefreshBtn">Refresh Data</button>
-            <button id="testConnectionBtn">Test Connection</button>
-            <button id="useSampleBtn">Use Sample Data</button>
+{% block title %}PeakWise - Energy Dashboard{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.1/dist/chartjs-adapter-moment.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="controls">
+    <button id="forceRefreshBtn">Refresh Data</button>
+    <button id="testConnectionBtn">Test Connection</button>
+    <button id="useSampleBtn">Use Sample Data</button>
+</div>
+
+<div class="status-cards">
+    <div class="card" id="price-card">
+        <h2>Current Electricity Price</h2>
+        <div class="card-content">
+            <div class="metric" id="current-price">Loading...</div>
         </div>
-
-        <div class="status-cards">
-            <div class="card" id="price-card">
-                <h2>Current Electricity Price</h2>
-                <div class="card-content">
-                    <div class="metric" id="current-price">Loading...</div>
-                </div>
-            </div>
-            <div class="card" id="ghg-card">
-                <h2>Carbon Intensity</h2>
-                <div class="card-content">
-                    <div class="metric" id="carbon-intensity">Loading...</div>
-                </div>
-            </div>
+    </div>
+    <div class="card" id="ghg-card">
+        <h2>Carbon Intensity</h2>
+        <div class="card-content">
+            <div class="metric" id="carbon-intensity">Loading...</div>
         </div>
+    </div>
+</div>
 
-        <div class="dashboard-grid">
-            <div class="card">
-                <h2>Generation Mix</h2>
-                <div class="chart-container">
-                    <canvas id="generation-mix-chart"></canvas>
-                </div>
+<div class="dashboard-grid">
+    <div class="card">
+        <h2>Generation Mix</h2>
+        <div class="chart-container">
+            <canvas id="generation-mix-chart"></canvas>
+        </div>
+    </div>
+    <div class="card">
+        <h2>System Load</h2>
+        <div class="chart-container">
+            <canvas id="system-load-chart"></canvas>
+        </div>
+        <div class="chart-legend">
+            <div class="legend-item">
+                <span class="legend-color forecast"></span>
+                <span>Forecast</span>
             </div>
-            <div class="card">
-                <h2>System Load</h2>
-                <div class="chart-container">
-                    <canvas id="system-load-chart"></canvas>
-                </div>
-                <div class="chart-legend">
-                    <div class="legend-item">
-                        <span class="legend-color forecast"></span>
-                        <span>Forecast</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color actual"></span>
-                        <span>Actual</span>
-                    </div>
-                </div>
+            <div class="legend-item">
+                <span class="legend-color actual"></span>
+                <span>Actual</span>
             </div>
         </div>
     </div>
-    <script src="/static/script.js"></script>
-</body>
-</html> 
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/script.js"></script>
+{% endblock %} 

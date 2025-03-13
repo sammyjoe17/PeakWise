@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}PeakWise - Grid Education{% endblock %}
+
+{% block extra_head %}
+<style>
+    .education-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .education-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .education-header h1 {
+        font-size: 2.5rem;
+        color: var(--primary-black);
+        margin-bottom: 1rem;
+    }
+
+    .education-header p {
+        font-size: 1.2rem;
+        color: var(--color-text-light);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .articles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .article-card {
+        background: var(--color-card);
+        border-radius: 12px;
+        box-shadow: 0 2px 4px var(--shadow-color);
+        border: 2px solid var(--primary-black);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .article-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .article-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 2px solid var(--primary-black);
+    }
+
+    .article-content {
+        padding: 1.5rem;
+    }
+
+    .article-content h2 {
+        font-size: 1.5rem;
+        color: var(--primary-black);
+        margin-bottom: 1rem;
+    }
+
+    .article-content p {
+        color: var(--color-text-light);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .article-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--color-text-light);
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .read-more {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background: var(--primary-yellow);
+        color: var(--primary-black);
+        text-decoration: none;
+        border-radius: 6px;
+        border: 2px solid var(--primary-black);
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .read-more:hover {
+        background: var(--primary-black);
+        color: var(--primary-yellow);
+    }
+
+    @media (max-width: 768px) {
+        .articles-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="education-container">
+    <div class="education-header">
+        <h1>Understanding the Electrical Grid</h1>
+        <p>Learn about how the electrical grid works, your role in demand management, and how to make informed decisions about your energy usage.</p>
+    </div>
+
+    <div class="articles-grid">
+        <!-- Article 1: Grid Basics -->
+        <article class="article-card">
+            <img src="{{ url_for('static', filename='images/grid-basics.jpg') }}" alt="Grid Basics" class="article-image">
+            <div class="article-content">
+                <h2>The Basics of the Electrical Grid</h2>
+                <p>Learn about the fundamental components of the electrical grid, how power is generated, transmitted, and distributed to your home.</p>
+                <div class="article-meta">
+                    <span><i class="far fa-clock"></i> 5 min read</span>
+                    <span><i class="far fa-bookmark"></i> Beginner</span>
+                </div>
+                <a href="{{ url_for('grid_basics') }}" class="read-more">Read More</a>
+            </div>
+        </article>
+
+        <!-- Article 2: Demand Response -->
+        <article class="article-card">
+            <img src="{{ url_for('static', filename='images/demand-response.jpg') }}" alt="Demand Response" class="article-image">
+            <div class="article-content">
+                <h2>Understanding Demand Response</h2>
+                <p>Discover how demand response programs work and how your energy consumption choices can help balance the grid during peak times.</p>
+                <div class="article-meta">
+                    <span><i class="far fa-clock"></i> 7 min read</span>
+                    <span><i class="far fa-bookmark"></i> Intermediate</span>
+                </div>
+                <a href="{{ url_for('demand_response') }}" class="read-more">Read More</a>
+            </div>
+        </article>
+
+        <!-- Article 3: Renewable Energy -->
+        <article class="article-card">
+            <img src="{{ url_for('static', filename='images/renewable-energy.jpg') }}" alt="Renewable Energy" class="article-image">
+            <div class="article-content">
+                <h2>Renewable Energy Integration</h2>
+                <p>Explore how renewable energy sources are integrated into the grid and the challenges and opportunities they present.</p>
+                <div class="article-meta">
+                    <span><i class="far fa-clock"></i> 6 min read</span>
+                    <span><i class="far fa-bookmark"></i> Intermediate</span>
+                </div>
+                <a href="{{ url_for('renewable_energy') }}" class="read-more">Read More</a>
+            </div>
+        </article>
+
+        <!-- Article 4: Smart Grid -->
+        <article class="article-card">
+            <img src="{{ url_for('static', filename='images/smart-grid.jpg') }}" alt="Smart Grid" class="article-image">
+            <div class="article-content">
+                <h2>The Smart Grid Revolution</h2>
+                <p>Learn about the transformation of the electrical grid into a smart, digital network and how it benefits consumers and utilities.</p>
+                <div class="article-meta">
+                    <span><i class="far fa-clock"></i> 8 min read</span>
+                    <span><i class="far fa-bookmark"></i> Advanced</span>
+                </div>
+                <a href="{{ url_for('smart_grid') }}" class="read-more">Read More</a>
+            </div>
+        </article>
+    </div>
+</div>
+{% endblock %} 
